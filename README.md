@@ -282,15 +282,6 @@ app.cors.allowed-headers=*
 logging.level.com.projetfulstack.studentgrademanagement=DEBUG
 logging.level.org.springframework.security=DEBUG
 ```
-
-## 🤝 Contribution
-
-1. Fork le projet
-2. Créer une branche feature (`git checkout -b feature/AmazingFeature`)
-3. Commit les changements (`git commit -m 'Add some AmazingFeature'`)
-4. Push vers la branche (`git push origin feature/AmazingFeature`)
-5. Ouvrir une Pull Request
-
 ## 📝 Changelog
 
 ### Version 1.0.0
@@ -306,16 +297,6 @@ logging.level.org.springframework.security=DEBUG
 - [ ] Tests d'intégration à compléter
 - [ ] Optimisation des requêtes
 
-## 📞 Support
-
-Pour toute question ou problème :
-- 📧 Email: contact@projetfulstack.com
-- 🐛 Issues: [GitHub Issues](https://github.com/your-repo/issues)
-
-## 📄 Licence
-
-Ce projet est sous licence MIT. Voir le fichier `LICENSE` pour plus de détails.
-
 ---
 
-**Développé avec ❤️ par l'équipe ProjetFullStack**
+**Développé avec ❤️ par Bomgnin Pategou Yannic**
