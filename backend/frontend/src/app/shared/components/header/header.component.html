@@ -1,0 +1,36 @@
+<header class="header">
+  <div class="container">
+    <nav class="nav">
+      <div class="nav-brand">
+        <h1>{{ currentUser ? 'Gestion des Notes' : 'Système de Gestion des Notes' }}</h1>
+      </div>
+      
+      <div class="nav-links" *ngIf="currentUser">
+        <a routerLink="/dashboard" routerLinkActive="active">Tableau de bord</a>
+        
+        <a routerLink="/students" routerLinkActive="active" 
+           *ngIf="authService.isTeacher() || authService.isAdmin()">
+          Étudiants
+        </a>
+        
+        <a routerLink="/grades" routerLinkActive="active"
+           *ngIf="authService.isTeacher() || authService.isAdmin()">
+          Notes
+        </a>
+        
+        <a routerLink="/subjects" routerLinkActive="active"
+           *ngIf="authService.isTeacher() || authService.isAdmin()">
+          Matières
+        </a>
+        
+        <a routerLink="/profile" routerLinkActive="active">Profil</a>
+        
+        <div class="nav-user">
+          <span>{{ currentUser.firstName }} {{ currentUser.lastName }}</span>
+          <span class="user-role">({{ userRole }})</span>
+          <button class="btn btn-secondary" (click)="logout()">Déconnexion</button>
+        </div>
+      </div>
+    </nav>
+  </div>
+</header>

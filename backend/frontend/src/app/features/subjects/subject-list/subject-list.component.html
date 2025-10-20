@@ -1,0 +1,54 @@
+<div class="subject-list-container">
+  <div class="container">
+    <div class="page-header">
+      <h1>Gestion des Matières</h1>
+      <button class="btn btn-primary" routerLink="/subjects/new">
+        + Nouvelle matière
+      </button>
+    </div>
+
+    <div class="loading" *ngIf="isLoading">
+      <p>Chargement des matières...</p>
+    </div>
+
+    <div class="subjects-content" *ngIf="!isLoading">
+      <div class="subjects-grid" *ngIf="subjects.length > 0">
+        <div class="subject-card" *ngFor="let subject of subjects">
+          <div class="subject-header">
+            <h3>{{ subject.name }}</h3>
+            <span class="status-badge" [class]="getStatusClass(subject)">
+              {{ getStatusBadge(subject) }}
+            </span>
+          </div>
+          <div class="subject-details">
+            <p><strong>Code:</strong> {{ subject.code }}</p>
+            <p><strong>Crédits:</strong> {{ subject.credits }}</p>
+            <p *ngIf="subject.description"><strong>Description:</strong> {{ subject.description }}</p>
+          </div>
+          <div class="subject-actions">
+            <button class="btn btn-sm btn-secondary" [routerLink]="['/subjects', subject.id]">
+              Voir
+            </button>
+            <button class="btn btn-sm btn-primary" [routerLink]="['/subjects', subject.id, 'edit']">
+              Modifier
+            </button>
+            <button class="btn btn-sm btn-danger" (click)="deleteSubject(subject)">
+              Supprimer
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="no-subjects" *ngIf="subjects.length === 0">
+        <div class="no-subjects-content">
+          <div class="no-subjects-icon">📚</div>
+          <h3>Aucune matière trouvée</h3>
+          <p>Il n'y a pas encore de matières dans le système.</p>
+          <button class="btn btn-primary" routerLink="/subjects/new">
+            Ajouter la première matière
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

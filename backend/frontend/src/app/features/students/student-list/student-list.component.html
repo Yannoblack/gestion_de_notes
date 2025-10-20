@@ -1,0 +1,121 @@
+<div class="student-list-container">
+  <div class="container">
+    <div class="page-header">
+      <h1>Gestion des Étudiants</h1>
+      <button class="btn btn-primary" routerLink="/students/new">
+        + Nouvel étudiant
+      </button>
+    </div>
+
+    <div class="search-section">
+      <div class="search-box">
+        <input
+          type="text"
+          [(ngModel)]="searchTerm"
+          placeholder="Rechercher un étudiant..."
+          class="form-control"
+          (keyup.enter)="onSearch()"
+        >
+        <button class="btn btn-secondary" (click)="onSearch()">
+          Rechercher
+        </button>
+      </div>
+    </div>
+
+    <div class="loading" *ngIf="isLoading">
+      <p>Chargement des étudiants...</p>
+    </div>
+
+    <div class="students-content" *ngIf="!isLoading">
+      <div class="students-table-container" *ngIf="students.length > 0">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Nom complet</th>
+              <th>ID Étudiant</th>
+              <th>Email</th>
+              <th>Classe</th>
+              <th>Moyenne</th>
+              <th>Statut</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let student of students">
+              <td>{{ getFullName(student) }}</td>
+              <td>{{ student.studentId }}</td>
+              <td>{{ student.email }}</td>
+              <td>{{ student.className || 'Non assigné' }}</td>
+              <td>{{ student.averageGrade ? student.averageGrade.toFixed(2) + '/20' : 'N/A' }}</td>
+              <td>
+                <span class="status-badge" [class]="getStatusClass(student)">
+                  {{ getStatusBadge(student) }}
+                </span>
+              </td>
+              <td class="actions">
+                <button class="btn btn-sm btn-secondary" [routerLink]="['/students', student.id]">
+                  Voir
+                </button>
+                <button class="btn btn-sm btn-primary" [routerLink]="['/students', student.id, 'edit']">
+                  Modifier
+                </button>
+                <button class="btn btn-sm btn-danger" (click)="deleteStudent(student)">
+                  Supprimer
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="no-students" *ngIf="students.length === 0">
+        <div class="no-students-content">
+          <div class="no-students-icon">👥</div>
+          <h3>Aucun étudiant trouvé</h3>
+          <p *ngIf="searchTerm">Aucun étudiant ne correspond à votre recherche.</p>
+          <p *ngIf="!searchTerm">Il n'y a pas encore d'étudiants dans le système.</p>
+          <button class="btn btn-primary" routerLink="/students/new" *ngIf="!searchTerm">
+            Ajouter le premier étudiant
+          </button>
+        </div>
+      </div>
+
+      <div class="pagination" *ngIf="totalPages > 1">
+        <button 
+          class="btn btn-secondary"
+          [disabled]="currentPage === 0"
+          (click)="onPageChange(currentPage - 1)"
+        >
+          Précédent
+        </button>
+        
+        <div class="page-numbers">
+          <button
+            *ngFor="let page of getPageNumbers()"
+            class="btn btn-sm"
+            [class]="page === currentPage ? 'btn-primary' : 'btn-secondary'"
+            (click)="onPageChange(page)"
+          >
+            {{ page + 1 }}
+          </button>
+        </div>
+        
+        <button 
+          class="btn btn-secondary"
+          [disabled]="currentPage === totalPages - 1"
+          (click)="onPageChange(currentPage + 1)"
+        >
+          Suivant
+        </button>
+      </div>
+
+      <div class="pagination-info">
+        <p>
+          Affichage de {{ (currentPage * pageSize) + 1 }} à 
+          {{ Math.min((currentPage + 1) * pageSize, totalElements) }} 
+          sur {{ totalElements }} étudiants
+        </p>
+      </div>
+    </div>
+  </div>
+</div>

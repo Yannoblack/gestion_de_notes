@@ -1,0 +1,237 @@
+<div class="register-container">
+  <div class="register-card">
+    <div class="register-header">
+      <h1>📝 Inscription</h1>
+      <p>Créez votre compte pour accéder au système</p>
+    </div>
+
+    <!-- Messages de succès/erreur -->
+    <div *ngIf="successMessage" class="alert alert-success">
+      ✅ {{ successMessage }}
+    </div>
+
+    <div *ngIf="errorMessage" class="alert alert-error">
+      ❌ {{ errorMessage }}
+    </div>
+
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="register-form">
+      
+      <!-- Informations personnelles -->
+      <div class="form-section">
+        <h3>Informations personnelles</h3>
+        
+        <div class="form-row">
+          <div class="form-group">
+            <label for="firstName">Prénom *</label>
+            <input
+              type="text"
+              id="firstName"
+              formControlName="firstName"
+              [class.invalid]="isFieldInvalid('firstName')"
+              placeholder="Jean"
+            />
+            <span *ngIf="isFieldInvalid('firstName')" class="error-message">
+              {{ getFieldError('firstName') }}
+            </span>
+          </div>
+
+          <div class="form-group">
+            <label for="lastName">Nom *</label>
+            <input
+              type="text"
+              id="lastName"
+              formControlName="lastName"
+              [class.invalid]="isFieldInvalid('lastName')"
+              placeholder="Dupont"
+            />
+            <span *ngIf="isFieldInvalid('lastName')" class="error-message">
+              {{ getFieldError('lastName') }}
+            </span>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="email">Email *</label>
+          <input
+            type="email"
+            id="email"
+            formControlName="email"
+            [class.invalid]="isFieldInvalid('email')"
+            placeholder="jean.dupont@example.com"
+          />
+          <span *ngIf="isFieldInvalid('email')" class="error-message">
+            {{ getFieldError('email') }}
+          </span>
+        </div>
+      </div>
+
+      <!-- Mot de passe -->
+      <div class="form-section">
+        <h3>Mot de passe</h3>
+        
+        <div class="form-group">
+          <label for="password">Mot de passe *</label>
+          <input
+            type="password"
+            id="password"
+            formControlName="password"
+            [class.invalid]="isFieldInvalid('password')"
+            placeholder="Minimum 6 caractères"
+          />
+          <span *ngIf="isFieldInvalid('password')" class="error-message">
+            {{ getFieldError('password') }}
+          </span>
+        </div>
+
+        <div class="form-group">
+          <label for="confirmPassword">Confirmer le mot de passe *</label>
+          <input
+            type="password"
+            id="confirmPassword"
+            formControlName="confirmPassword"
+            [class.invalid]="isFieldInvalid('confirmPassword')"
+            placeholder="Retapez votre mot de passe"
+          />
+          <span *ngIf="isFieldInvalid('confirmPassword')" class="error-message">
+            {{ getFieldError('confirmPassword') }}
+          </span>
+        </div>
+      </div>
+
+      <!-- Rôle -->
+      <div class="form-section">
+        <h3>Type de compte</h3>
+        
+        <div class="form-group">
+          <label for="role">Rôle *</label>
+          <select
+            id="role"
+            formControlName="role"
+            [class.invalid]="isFieldInvalid('role')"
+          >
+            <option value="">Sélectionnez un rôle</option>
+            <option [value]="userRoles.STUDENT">👨‍🎓 Étudiant</option>
+            <option [value]="userRoles.TEACHER">👨‍🏫 Enseignant</option>
+          </select>
+          <span *ngIf="isFieldInvalid('role')" class="error-message">
+            {{ getFieldError('role') }}
+          </span>
+        </div>
+      </div>
+
+      <!-- Champs spécifiques aux étudiants -->
+      <div class="form-section" *ngIf="showStudentFields()">
+        <h3>Informations étudiant</h3>
+        
+        <div class="form-group">
+          <label for="studentId">Numéro étudiant *</label>
+          <input
+            type="text"
+            id="studentId"
+            formControlName="studentId"
+            [class.invalid]="isFieldInvalid('studentId')"
+            placeholder="STU2024001"
+          />
+          <span *ngIf="isFieldInvalid('studentId')" class="error-message">
+            {{ getFieldError('studentId') }}
+          </span>
+        </div>
+      </div>
+
+      <!-- Champs spécifiques aux enseignants -->
+      <div class="form-section" *ngIf="showTeacherFields()">
+        <h3>Informations enseignant</h3>
+        
+        <div class="form-group">
+          <label for="employeeId">Numéro employé *</label>
+          <input
+            type="text"
+            id="employeeId"
+            formControlName="employeeId"
+            [class.invalid]="isFieldInvalid('employeeId')"
+            placeholder="TEACH2024001"
+          />
+          <span *ngIf="isFieldInvalid('employeeId')" class="error-message">
+            {{ getFieldError('employeeId') }}
+          </span>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="department">Département</label>
+            <input
+              type="text"
+              id="department"
+              formControlName="department"
+              placeholder="Mathématiques"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="specialization">Spécialisation</label>
+            <input
+              type="text"
+              id="specialization"
+              formControlName="specialization"
+              placeholder="Algèbre"
+            />
+          </div>
+        </div>
+      </div>
+
+      <!-- Informations optionnelles -->
+      <div class="form-section">
+        <h3>Informations complémentaires (optionnel)</h3>
+        
+        <div class="form-group">
+          <label for="address">Adresse</label>
+          <input
+            type="text"
+            id="address"
+            formControlName="address"
+            placeholder="123 Rue de la Paix, Paris"
+          />
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label for="phoneNumber">Téléphone</label>
+            <input
+              type="tel"
+              id="phoneNumber"
+              formControlName="phoneNumber"
+              placeholder="+33 6 12 34 56 78"
+            />
+          </div>
+
+          <div class="form-group">
+            <label for="dateOfBirth">Date de naissance</label>
+            <input
+              type="date"
+              id="dateOfBirth"
+              formControlName="dateOfBirth"
+            />
+          </div>
+        </div>
+      </div>
+
+      <!-- Boutons -->
+      <div class="form-actions">
+        <button
+          type="submit"
+          class="btn btn-primary"
+          [disabled]="isLoading || registerForm.invalid"
+        >
+          <span *ngIf="!isLoading">S'inscrire</span>
+          <span *ngIf="isLoading">⏳ Inscription en cours...</span>
+        </button>
+
+        <p class="login-link">
+          Vous avez déjà un compte ?
+          <a routerLink="/login">Se connecter</a>
+        </p>
+      </div>
+    </form>
+  </div>
+</div>
+

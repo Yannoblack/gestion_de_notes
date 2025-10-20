@@ -1,0 +1,96 @@
+<div class="student-detail-container">
+  <div class="container">
+    <div class="page-header">
+      <button class="btn btn-secondary" routerLink="/students">
+        ← Retour à la liste
+      </button>
+      <h1>Détails de l'étudiant</h1>
+      <div class="actions">
+        <button class="btn btn-primary" [routerLink]="['/students', student?.id, 'edit']" *ngIf="student">
+          Modifier
+        </button>
+      </div>
+    </div>
+
+    <div class="loading" *ngIf="isLoading">
+      <p>Chargement des détails...</p>
+    </div>
+
+    <div class="student-detail-content" *ngIf="student && !isLoading">
+      <div class="student-card">
+        <div class="student-header">
+          <div class="student-avatar">
+            {{ student.firstName.charAt(0) }}{{ student.lastName.charAt(0) }}
+          </div>
+          <div class="student-info">
+            <h2>{{ getFullName(student) }}</h2>
+            <p class="student-id">ID: {{ student.studentId }}</p>
+            <span class="status-badge" [class]="getStatusClass(student)">
+              {{ getStatusBadge(student) }}
+            </span>
+          </div>
+        </div>
+
+        <div class="student-details">
+          <div class="detail-section">
+            <h3>Informations personnelles</h3>
+            <div class="detail-grid">
+              <div class="detail-item">
+                <label>Prénom:</label>
+                <span>{{ student.firstName }}</span>
+              </div>
+              <div class="detail-item">
+                <label>Nom:</label>
+                <span>{{ student.lastName }}</span>
+              </div>
+              <div class="detail-item">
+                <label>Email:</label>
+                <span>{{ student.email }}</span>
+              </div>
+              <div class="detail-item">
+                <label>Nom d'utilisateur:</label>
+                <span>{{ student.username }}</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="detail-section">
+            <h3>Informations académiques</h3>
+            <div class="detail-grid">
+              <div class="detail-item">
+                <label>Classe:</label>
+                <span>{{ student.className || 'Non assigné' }}</span>
+              </div>
+              <div class="detail-item">
+                <label>Moyenne générale:</label>
+                <span class="grade-value">{{ student.averageGrade ? student.averageGrade.toFixed(2) + '/20' : 'N/A' }}</span>
+              </div>
+              <div class="detail-item">
+                <label>Total des crédits:</label>
+                <span>{{ student.totalCredits || 'N/A' }}</span>
+              </div>
+              <div class="detail-item">
+                <label>Date d'inscription:</label>
+                <span>{{ formatDate(student.enrollmentDate) }}</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="detail-section">
+            <h3>Informations du compte</h3>
+            <div class="detail-grid">
+              <div class="detail-item">
+                <label>Date de création:</label>
+                <span>{{ formatDate(student.createdAt) }}</span>
+              </div>
+              <div class="detail-item">
+                <label>Dernière mise à jour:</label>
+                <span>{{ formatDate(student.updatedAt) }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,103 @@
+<div class="grade-list-container">
+  <div class="container">
+    <div class="page-header">
+      <h1>Gestion des Notes</h1>
+      <button class="btn btn-primary" routerLink="/grades/new">
+        + Nouvelle note
+      </button>
+    </div>
+
+    <div class="loading" *ngIf="isLoading">
+      <p>Chargement des notes...</p>
+    </div>
+
+    <div class="grades-content" *ngIf="!isLoading">
+      <div class="grades-table-container" *ngIf="grades.length > 0">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Étudiant</th>
+              <th>Matière</th>
+              <th>Type d'examen</th>
+              <th>Note</th>
+              <th>Date</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let grade of grades">
+              <td>{{ grade.student?.firstName }} {{ grade.student?.lastName }}</td>
+              <td>{{ grade.subject?.name }}</td>
+              <td>{{ grade.examType }}</td>
+              <td>
+                <span class="grade-score" [class]="getGradeClass(grade)">
+                  {{ grade.score }}/{{ grade.maxScore }}
+                </span>
+              </td>
+              <td>{{ formatDate(grade.examDate) }}</td>
+              <td class="actions">
+                <button class="btn btn-sm btn-secondary" [routerLink]="['/grades', grade.id]">
+                  Voir
+                </button>
+                <button class="btn btn-sm btn-primary" [routerLink]="['/grades', grade.id, 'edit']">
+                  Modifier
+                </button>
+                <button class="btn btn-sm btn-danger" (click)="deleteGrade(grade)">
+                  Supprimer
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="no-grades" *ngIf="grades.length === 0">
+        <div class="no-grades-content">
+          <div class="no-grades-icon">📝</div>
+          <h3>Aucune note trouvée</h3>
+          <p>Il n'y a pas encore de notes dans le système.</p>
+          <button class="btn btn-primary" routerLink="/grades/new">
+            Ajouter la première note
+          </button>
+        </div>
+      </div>
+
+      <div class="pagination" *ngIf="totalPages > 1">
+        <button 
+          class="btn btn-secondary"
+          [disabled]="currentPage === 0"
+          (click)="onPageChange(currentPage - 1)"
+        >
+          Précédent
+        </button>
+        
+        <div class="page-numbers">
+          <button
+            *ngFor="let page of getPageNumbers()"
+            class="btn btn-sm"
+            [class]="page === currentPage ? 'btn-primary' : 'btn-secondary'"
+            (click)="onPageChange(page)"
+          >
+            {{ page + 1 }}
+          </button>
+        </div>
+        
+        <button 
+          class="btn btn-secondary"
+          [disabled]="currentPage === totalPages - 1"
+          (click)="onPageChange(currentPage + 1)"
+        >
+          Suivant
+        </button>
+      </div>
+
+      <div class="pagination-info">
+        <p>
+          Affichage de {{ (currentPage * pageSize) + 1 }} à 
+          {{ Math.min((currentPage + 1) * pageSize, totalElements) }} 
+          sur {{ totalElements }} notes
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
